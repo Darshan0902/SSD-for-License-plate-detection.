@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Plate Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="file"],
+        input[type="submit"] {
+            display: block;
+            margin-bottom: 10px;
+        }
+        #imagePreview {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>License Plate Detection</h1>
+    {% if error %}
+    <p class="error">{{ error }}</p>
+    {% endif %}
+    <form id="uploadForm" enctype="multipart/form-data" action="/upload" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number" required><br><br>
+        <input type="file" id="file" name="file" accept="image/*" required><br><br>
+        <input type="submit" value="Upload">
+    </form>
+
+    <div id="imagePreview"></div>
+
+    <div id="existing-data">
+        {% if df %}
+        {{ df|safe }}
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('file').addEventListener('change', function() {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var image = document.createElement('img');
+                    image.src = event.target.result;
+                    document.getElementById('imagePreview').innerHTML = '';
+                    document.getElementById('imagePreview').appendChild(image);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
